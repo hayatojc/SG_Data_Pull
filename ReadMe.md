@@ -1,14 +1,14 @@
 # Data Pull
 
-TODO: Write a project description
+Code snippet for pulling ShotGun threads from the API and converting them to word docs for archiving.
 
 ## Installation
 
-TODO: Describe the installation process
+Currently ran from the console. 
 
 ## Usage
 
-TODO: Write usage instructions
+Query the project number and replace the project id number in the main function
 
 ## Contributing
 
@@ -20,12 +20,5 @@ TODO: Write usage instructions
 
 ## History
 
-TODO: Write history
+V1 uploaded
 
-## Credits
-
-TODO: Write credits
-
-## License
-
-TODO: Write license
