@@ -1,0 +1,23 @@
+<snippet>
+  <content><![CDATA[
+# ${1:Project Name}
+A small code snippet used to pull Activity threads from the Shotgun API and create word docs for archiving
+## Installation
+Ran from console
+## Usage
+Query Project id and then change the id in the main function
+## Contributing
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
+## History
+V1 up
+## Credits
+Jose Chavez
+## License
+TODO: Write license
+]]></content>
+  <tabTrigger>readme</tabTrigger>
+</snippet>
