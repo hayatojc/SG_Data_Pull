@@ -1,4 +1,4 @@
-# Data Pull
+# SG API Data Pull
 
 Code snippet for pulling ShotGun threads from the API and converting them to word docs for archiving.
 
