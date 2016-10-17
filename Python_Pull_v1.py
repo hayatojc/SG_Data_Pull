@@ -4,7 +4,7 @@ from docx.shared import Inches
 from shotgun_api3 import Shotgun
 
 #Setting up API for Shotgun
-SERVER_PATH = "https://medialab.shotgunstudio.com"
+SERVER_PATH = "https://.com"
 SCRIPT_NAME = 'Data_Pull'
 SCRIPT_KEY = '6ea7f7d255e7face13aaba803e542e1cda4095068aaccfe6d07f20ff548e50c6'
 sg = Shotgun(SERVER_PATH, SCRIPT_NAME, SCRIPT_KEY)
