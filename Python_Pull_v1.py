@@ -1,26 +1,21 @@
-from pprint import pprint
 from docx import Document
-from docx.shared import Inches
 from shotgun_api3 import Shotgun
 
-#Setting up API for Shotgun
-SERVER_PATH = "https://.com"
-SCRIPT_NAME = 'Data_Pull'
-SCRIPT_KEY = '6ea7f7d255e7face13aaba803e542e1cda4095068aaccfe6d07f20ff548e50c6'
+# Setting up API for Shotgun
+SERVER_PATH = ""
+SCRIPT_NAME = ''
+SCRIPT_KEY = ''
 sg = Shotgun(SERVER_PATH, SCRIPT_NAME, SCRIPT_KEY)
 
-#Tools used to Query some things
-'''
-proj = sg.find_one("Project", [["name", "is", "Kohler Company"]])
+# Tools used to Query the project name to their ID
+proj = sg.find_one("Project", [["name", "is", "Walt Denny"]])
 print proj
 query = sg.schema_read()['Asset'].keys()
 print query
-'''
+print sg.schema_read()['Asset'].get('sg_rpm_number')
 
-#function to format the text that gets read by Note_Thread_Read
+# Function to format the text that gets read by Note_Thread_Read
 def formatted(x):
-    #for key, value in x.iteritems():
-        #print "$", key, "$", value
     x.pop("type", None)
     x.pop("id", None)
     Name = x.get('created_by', {}).get('name')
@@ -41,38 +36,42 @@ def formatted(x):
     x.pop("user", None)
     return x
 
-#Functions used to write out the documents to a directory in word.
+# Functions used to write out the documents to a directory in word
 def writeDoc(docTitle, feed, fileName):
-    #Setting up word doc for file writing
+    # Setting up word doc for file writing
     document = Document()
     document.add_heading(fileName, 0)
 
-    #Writing it out
-    try:
-        document.add_paragraph(feed)
-    except ValueError:
-        pass
+    # Writing it out
+    document.add_paragraph(unicode(feed, 'utf-8'))
     try :
-        document.save('I:\dev_JC\_Python\Data_Pull\Kohler\\' + fileName + '.docx')
+        document.save('I:\dev_JC\_Python\Data_Pull\WD\\' + fileName + '.docx')
     except IOError:
-        document.save('I:\dev_JC\_Python\Data_Pull\Kohler\\' + "Bad_Name" + '.docx')
+        document.save('I:\dev_JC\_Python\Data_Pull\WD\\' + "Bad_Name" + '.docx')
 
-#Pulls a shotgun Thread based on the id
+# Pulls a shotgun Thread based on the id
 formatting ={}
-filters = [ ['id', 'is', 74], ]  ##This is the controller, place whatever project ID you need docs for
+filters = [ ['id', 'is', 123]]  ##This is the controller, place whatever project ID you need docs for
 project = sg.find_one('Project', filters, fields=['id'])
 filters = [ ['project', 'is', {'type':'Project', 'id':project['id']}], ]
-result = sg.find('Asset', filters, fields=['sg_rpm_number', 'notes', 'id', 'sg_rpm_number'])
+#result = sg.find('Asset', filters, fields=['sg_rpm_number', 'notes', 'id', 'sg_rpm_number'])
+result = sg.find('Asset', filters, fields=['sg_rpm_number', 'cached_display_name','notes', 'id', 'sg_rpm_number'])
+print result
+
+
 for i in result:
     thread = ""
     dict = i['notes']
-    excludeRPM = ['50428', '50825', '50625', '50213', '50048', '49721']
-    excludeID = ['6072', '6352', '6196', '7701', '6176', '6171', '6158',
-                 '6470', '7010', '7141', '7351', '7267', '7290', '7321']
+    excludeRPM = []
+    excludeID = []
+
+    # Filter out array elements that are not threads in list/bad job numbers
     if not dict:
         continue
     if i['sg_rpm_number'] in excludeRPM:
         continue
+
+    # Pulling the thread from the dictionary
     dictStr = (dict[0]['name'])
     dictStr = dictStr.splitlines()
     try:
@@ -80,11 +79,15 @@ for i in result:
     except IndexError:
         thread += 'null'
         continue
+
+    # Setting the fileName of the document
     try:
-        fileName = 'Kohler - ' + i['sg_rpm_number']
+        fileName = 'Walt Denny - ' + i['sg_rpm_number'] + ' ' + i['cached_display_name']
     except TypeError:
-        filename = 'Kohler - MISSING RPM NUMBER'
+        filename = 'Walt Denny - ' + i['cached_display _name']
     print fileName
+
+    # Get's the id(TITLE) and formats it.Then appends the thread to it
     currentID = str(dict[0]['id'])
     if currentID in excludeID:
         continue
@@ -97,4 +100,6 @@ for i in result:
         else:
             pass
     thread += '\n**END OF THREAD**'
+
+    #Calls the Word function for file generation
     writeDoc(dictStr, thread, fileName)
